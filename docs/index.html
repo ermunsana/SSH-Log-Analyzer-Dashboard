@@ -8,70 +8,59 @@
   </head>
   <body>
     <main class="page-shell">
-      <header class="hero">
-        <p class="eyebrow">SSH log analyzer</p>
-        <h1>A quieter way to review failed SSH activity.</h1>
-        <p class="hero-copy">
-          Upload an <code>auth.log</code> file, send it to the FastAPI backend, and inspect failed logins, repeated
-          source IPs, and the raw events behind each result.
-        </p>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">SSH Log Analyzer</p>
+          <h1>Minimal incident review for Linux auth logs.</h1>
+        </div>
+        <p class="topbar-note">Upload a file. Review failed logins. Spot noisy sources fast.</p>
       </header>
 
-      <section class="panel upload-panel">
-        <div class="panel-header">
-          <h2>Run analysis</h2>
-          <p>Choose a local log file and send it to the configured API endpoint.</p>
-        </div>
-
+      <section class="panel">
         <form id="analyze-form" class="analyze-form">
-          <label class="field-label" for="log-file">Log file</label>
-          <div class="upload-row">
-            <input id="log-file" name="file" type="file" accept=".log,.txt" required />
-            <button id="analyze-button" type="submit">Analyze</button>
-          </div>
+          <label class="field-label" for="log-file">Upload auth.log file</label>
+          <input id="log-file" name="file" type="file" accept=".log,.txt" required />
+
+          <button id="analyze-button" type="submit">Analyze Log File</button>
+          <p class="helper-text">The dashboard uses the backend URL configured in <code>config.js</code>.</p>
         </form>
 
         <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
       </section>
 
       <section id="results" class="results hidden">
-        <div class="results-header">
-          <p class="results-kicker">Results</p>
-          <h2>Current file summary</h2>
-        </div>
-
         <div class="stats-grid">
           <article class="stat-card">
-            <span class="stat-label">Failed logins</span>
+            <span class="stat-label">Failed SSH logins</span>
             <strong id="total-failed-logins" class="stat-value">0</strong>
           </article>
           <article class="stat-card">
-            <span class="stat-label">Noisiest source IP</span>
+            <span class="stat-label">Most active source IP</span>
             <strong id="top-ip-highlight" class="stat-value">-</strong>
           </article>
         </div>
 
         <section class="panel alerts-panel">
-          <div class="panel-header section-heading">
-            <h2>Alerts</h2>
-            <p>Simple rules highlight repeated hosts and likely username enumeration.</p>
+          <div class="section-heading">
+            <h2>Security Alerts</h2>
+            <p>Small rule-based findings for brute-force and username guessing behavior.</p>
           </div>
           <div id="alerts" class="empty-state">No alerts yet.</div>
         </section>
 
         <div class="content-grid">
           <section class="panel">
-            <div class="panel-header section-heading">
-              <h2>Top IP addresses</h2>
-              <p>Sorted by failed login frequency with suspicious sources called out.</p>
+            <div class="section-heading">
+              <h2>Top IP Addresses</h2>
+              <p>Sorted by failed login frequency.</p>
             </div>
             <div id="top-ips" class="empty-state">No data yet.</div>
           </section>
 
           <section class="panel">
-            <div class="panel-header section-heading">
-              <h2>Failed login events</h2>
-              <p>Each row maps to one suspicious SSH login attempt from the uploaded file.</p>
+            <div class="section-heading">
+              <h2>Failed Login Events</h2>
+              <p>Raw failed SSH events extracted from the uploaded file.</p>
             </div>
             <div class="table-wrapper">
               <table>
@@ -95,9 +84,9 @@
         </div>
 
         <section class="panel usernames-panel">
-          <div class="panel-header section-heading">
-            <h2>Most targeted usernames</h2>
-            <p>Useful for spotting common admin accounts and repeated guessing patterns.</p>
+          <div class="section-heading">
+            <h2>Most Targeted Usernames</h2>
+            <p>Accounts most often targeted by failed login attempts.</p>
           </div>
           <div id="targeted-usernames" class="empty-state">No data yet.</div>
         </section>
