@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ssh-log-analyzer-api
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://ermunsana.github.io

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SSH Log Analyzer Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">SSH log analyzer</p>
+        <h1>A quieter way to review failed SSH activity.</h1>
+        <p class="hero-copy">
+          Upload an <code>auth.log</code> file, send it to the FastAPI backend, and inspect failed logins, repeated
+          source IPs, and the raw events behind each result.
+        </p>
+      </header>
+
+      <section class="panel upload-panel">
+        <div class="panel-header">
+          <h2>Run analysis</h2>
+          <p>Choose a local log file and send it to the configured API endpoint.</p>
+        </div>
+
+        <form id="analyze-form" class="analyze-form">
+          <label class="field-label" for="log-file">Log file</label>
+          <div class="upload-row">
+            <input id="log-file" name="file" type="file" accept=".log,.txt" required />
+            <button id="analyze-button" type="submit">Analyze</button>
+          </div>
+        </form>
+
+        <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      </section>
+
+      <section id="results" class="results hidden">
+        <div class="results-header">
+          <p class="results-kicker">Results</p>
+          <h2>Current file summary</h2>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-label">Failed logins</span>
+            <strong id="total-failed-logins" class="stat-value">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Noisiest source IP</span>
+            <strong id="top-ip-highlight" class="stat-value">-</strong>
+          </article>
+        </div>
+
+        <section class="panel alerts-panel">
+          <div class="panel-header section-heading">
+            <h2>Alerts</h2>
+            <p>Simple rules highlight repeated hosts and likely username enumeration.</p>
+          </div>
+          <div id="alerts" class="empty-state">No alerts yet.</div>
+        </section>
+
+        <div class="content-grid">
+          <section class="panel">
+            <div class="panel-header section-heading">
+              <h2>Top IP addresses</h2>
+              <p>Sorted by failed login frequency with suspicious sources called out.</p>
+            </div>
+            <div id="top-ips" class="empty-state">No data yet.</div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header section-heading">
+              <h2>Failed login events</h2>
+              <p>Each row maps to one suspicious SSH login attempt from the uploaded file.</p>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>IP address</th>
+                    <th>User</th>
+                    <th>Method</th>
+                    <th>Line</th>
+                  </tr>
+                </thead>
+                <tbody id="events-body">
+                  <tr>
+                    <td colspan="5" class="empty-cell">No events yet.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel usernames-panel">
+          <div class="panel-header section-heading">
+            <h2>Most targeted usernames</h2>
+            <p>Useful for spotting common admin accounts and repeated guessing patterns.</p>
+          </div>
+          <div id="targeted-usernames" class="empty-state">No data yet.</div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>
